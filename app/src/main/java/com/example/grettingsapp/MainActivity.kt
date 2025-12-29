@@ -10,17 +10,28 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -46,7 +57,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             GrettingsAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    topBar = { MyAppBar() },
+                    bottomBar = { MyBottomAppBar() },
+                    floatingActionButton = { MyFloatingActionButton() })
+
+                { innerPadding ->
+
                     MyApp(modifier = Modifier.padding(innerPadding), context = LocalContext.current)
                 }
             }
@@ -67,6 +85,7 @@ fun MyApp(modifier: Modifier, context: Context) {
     Surface(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier.fillMaxSize()) {
             Image(
+                alpha = 0.5f,
                 painter = painterResource(R.drawable.img),
                 contentDescription = "Image",
                 contentScale = ContentScale.FillBounds, modifier = Modifier.fillMaxSize()
@@ -80,7 +99,7 @@ fun MyApp(modifier: Modifier, context: Context) {
                 Text(displayText, style = TextStyle(fontSize = 30.sp, color = Color.White))
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
-                    textStyle = TextStyle(color = Color.White),
+                    textStyle = TextStyle(color = Color.White, fontSize = 30.sp),
                     value = text,
                     onValueChange = { newValue ->
                         text = newValue
@@ -91,9 +110,99 @@ fun MyApp(modifier: Modifier, context: Context) {
                     displayText = text
                     Toast.makeText(context, "$text is typed by user!", Toast.LENGTH_LONG).show()
                 }) {
-                    Text("Allow Button")
+                    Text(
+                        "Allow Button", style = TextStyle(fontSize = 30.sp)
+                    )
                 }
             }
         }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MyAppBar() {
+    TopAppBar(
+        title = {
+            Text(
+                "Greetings App",
+                modifier = Modifier.padding(start = 10.dp),
+                fontSize = 20.sp
+            )
+        }, colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color.Green,
+            titleContentColor = Color.White
+        ),
+        navigationIcon = {
+            IconButton(onClick = {}) {
+                Icon(
+                    painterResource(R.drawable.baseline_menu_24),
+                    contentDescription = "iconButton",
+                    tint = Color.White,
+                    modifier = Modifier.size(60.dp)
+                )
+            }
+        },
+        actions = {
+            IconButton(onClick = {}) {
+                Icon(
+                    painterResource(R.drawable.baseline_settings_24),
+                    contentDescription = "icon",
+                    tint = Color.White,
+                    modifier = Modifier.size(60.dp)
+                )
+            }
+        }
+
+    )
+}
+
+@Composable
+fun MyBottomAppBar() {
+    BottomAppBar(containerColor = Color.Green, contentColor = Color.White) {
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        ) {
+            IconButton(onClick = {}) {
+                Icon(
+                    painterResource(R.drawable.baseline_settings_24),
+                    contentDescription = "icon",
+                    tint = Color.White,
+                    modifier = Modifier.size(60.dp)
+                )
+            }
+            IconButton(onClick = {}) {
+                Icon(
+                    painterResource(R.drawable.baseline_home_24),
+                    contentDescription = "icon",
+                    tint = Color.White,
+                    modifier = Modifier.size(60.dp)
+                )
+            }
+            IconButton(onClick = {}) {
+                Icon(
+                    painterResource(R.drawable.baseline_info_24),
+                    contentDescription = "icon",
+                    tint = Color.White,
+                    modifier = Modifier.size(60.dp)
+                )
+
+            }
+        }
+    }
+}
+
+@Composable
+fun MyFloatingActionButton() {
+    FloatingActionButton(onClick = {}, shape = CircleShape, containerColor = Color.Green) {
+        Icon(
+            painterResource(R.drawable.baseline_add_24),
+            contentDescription = "Simple Floating Action Button"
+        )
     }
 }
